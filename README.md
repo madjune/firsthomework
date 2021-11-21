@@ -225,4 +225,3 @@ awk [OPTION...] 'pattern { action }' [ARGUMENT...]
 |필드 중 최대 값 출력|awk '{max = 0; for (i=3; i<NF; i++) max = ($i > max) ? $i : max ; print max}' [FILE]|
 
 
->>아이고 끝났다 혹시몰라서 commit 좀더 해두겠습니다
