@@ -166,14 +166,63 @@ sed -n -e 'command' [input file]
 |-r|read|특정 행에 파일의 내용을 추가|
 
 
+# awk 명령어
+
+## awk란?
+* Aho+Weinberger+Kernighan 다른 명령어와는 다르게 이름을 디자인한 사람들의 이니셜을 조합해서 따왔다.
+* **awk**는 파일로부터 레코드를 선택하고 선택된 레코드에 포함된 값을 조작하거나 데이터화하는 것을 목적으로 사용하는 프로그램입니다.
+1) awk 명령어의 입력으로 지정 파일로부터 데이터 분류
+2) 분류된 텍스트 데이터를 바탕으로 패턴 매칭여부 검사나 데이터 조작 및 연산 등의 액션수행
+3) 그 결과를 출력
+* 위와 같은 기능을 수행한다
+
+### 레코드?
+![998C54465D1CBC7B16](https://user-images.githubusercontent.com/94767794/142755129-6b7d96ec-6728-4c20-b376-dbc9ba57b6a1.png)
+* 기본적으로 위처럼 입력 데이터를 레코드로 인식한다.
+* 그리고 각 레코드에 들어있는 텍스트를 공백문자로 구분된 필드로 분류한다
+## awk 명령의 기본 형식과 옵션, 그리고 사용 예
+```
+    awk [OPTION...] [awk program] [ARGUMENT...]
+      OPTION
+        -F        : 필드 구분 문자 지정.
+        -f        : awk program 파일 경로 지정.
+        -v        : awk program에서 사용될 특정 variable값 지정.
+      awk program
+        -f 옵션이 사용되지 않은 경우, awk가 실행할 awk program 코드 지정.
+      ARGUMENT
+        입력 파일 지정 또는 variable 값 지정.
+```
+* awk 명령어의 기본 형식과 옵션은 위와 같다.
+```
+pattern { action }
+```
+```
+awk [OPTION...] 'pattern { action }' [ARGUMENT...]
+```
+* **awk program** 의 구조와 사용할때 형태는 위처럼 되는데 **pattern 과 action은 모두 생략이 가능하다**
+        * 생략 될 때 pattern의 경우 모든 레코드가 적용되고 action의 경우 print가 적용된다.
+![99C761465D1CBF9B28](https://user-images.githubusercontent.com/94767794/142755114-d3296550-ecbf-48f0-a08b-e7627b202ea3.png)
+* 위 그림은 awk로 할 수 있는 작업의 간단한 예시 이다.
 
 
-
-
-
-
-
-
+|awk 사용 예|명령어 옵션|
+|:---|:-----|
+|파일의 전체 내용 출력|	awk '{ print }' [FILE]|
+|필드 값 출력|awk '{ print $1 }' [FILE]|
+|필드 값에 임의 문자열을 같이 출력|awk '{print "STR"$1, "STR"$2}' [FILE]|
+|지정된 문자열을 포함하는 레코드만 출력	awk '/STR/' [FILE]|
+|특정 필드 값 비교를 통해 선택된 레코드만 출력|awk '$1 == 10 { print $2 }' [FILE]|
+|특정 필드들의 합 구하기|awk '{sum += $3} END { print sum }' [FILE]|
+|여러 필드들의 합 구하기|awk '{ for (i=2; i<=NF; i++) total += $i }; END { print "TOTAL : "total }' [FILE]|
+|레코드 단위로 필드 합 및 평균 값 구하기|awk '{ sum = 0 } {sum += ($3+$4+$5) } { print $0, sum, sum/3 }' [FILE]|
+|필드에 연산을 수행한 결과 출력하기|awk '{print $1, $2, $3+2, $4, $5}' [FILE]|
+|레코드 또는 필드의 문자열 길이 검사|awk ' length($0) > 20' [FILE]|
+|파일에 저장된 awk program 실행|awk -f [AWK FILE] [FILE]|
+|필드 구분 문자 변경하기|awk -F ':' '{ print $1 }' [FILE]|
+|awk 실행 결과 레코드 정렬하기|awk '{ print $0 }' [FILE]|
+|특정 레코드만 출력하기|awk 'NR == 2 { print $0; exit }' [FILE]|
+|출력 필드 너비 지정하기|awk '{ printf "%-3s %-8s %-4s %-4s %-4s\n", $1, $2, $3, $4, $5}' [FILE]|
+|필드 중 최대 값 출력|awk '{max = 0; for (i=3; i<NF; i++) max = ($i > max) ? $i : max ; print max}' [FILE]|
 
 
 
