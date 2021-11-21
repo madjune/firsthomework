@@ -1,5 +1,4 @@
-# firsthomework
->먼저 쉘크립트의 getopt와 getopts를 알아보자.
+# getopt와 getopts를 알아보자.
 
 ## getopt란
 
@@ -87,3 +86,55 @@ save_webpage "https://${LANG}.wikipedia.org/wiki/${ARTICLE}"
 ```
 * 위키디피아의 웹페이지를 다운로드하는 이런한 프로그램이 있다고 가정하자.
 ### getopt 사용
+```
+# parse everything; if it fails we bail
+args=`getopt 'a:l:v' $*` || exit
+# now we have the sanitized args... replace the original with it
+set -- $args
+
+while true; do
+    case $1 in
+      (-v)   ((VERBOSE++));  shift;;
+      (-a)   ARTICLE=$2; shift 2;;
+      (-l)   LANG=$2; shift 2;;
+      (--)   shift; break;;
+      (*)    exit 1;;           # error
+    esac
+done
+
+remaining=("$@")
+```
+* 위 getopt는 선택적 인수를 지원하지않는다. 또한 article 제목에 공백이나 ?등의 특수기호가 들어간다면 바로 정지될 것이다
+
+### getopts 사용
+```
+#!/bin/sh
+while getopts ':a:l:v' opt; do
+    case $opt in
+      (v)   ((VERBOSE++));;
+      (a)   ARTICLE=$OPTARG;;
+      (l)   LANG=$OPTARG;;
+      (:)   # "optional arguments" (missing option-argument handling)
+            case $OPTARG in
+              (a) exit 1;; # error, according to our syntax
+              (l) :;;      # acceptable but does nothing
+            esac;;
+    esac
+done
+
+shift "$OPTIND"
+# remaining is "$@"
+```
+* 더이상 쉘스크립트 옵션을 바로 작동시키지 않아서 그것들을 시프트 할필요는 없어졌다. 다만 나머지 인수를 얻기위해 slicing 작업이 필요해졌다.
+
+# sed 명령어
+
+
+
+
+
+
+
+
+
+
