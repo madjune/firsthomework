@@ -129,12 +129,15 @@ shift "$OPTIND"
 
 # sed 명령어
 
+## sed란?
+* Stream Editor 의 약자로 원본 텍스트 파일을 편집하는 명령어이다.
+### vi편집기와의 차이
+* sed는 명령어 형태로 편집이 되어 vi처럼 실시간 편집이 아니다.
+* 원본을 건드리지 않고 편집하기 때문에 작업이 완료되기 떄문에 기본적으로는 원본에는 영향을 주지 않는다.
 
 
 
-
-
-
+![img1 daumcdn](https://user-images.githubusercontent.com/94767794/142754171-570bf474-9e59-44c2-b842-a7ac84eecd46.png)
 
 
 
